@@ -36,4 +36,12 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    - name: console
+      port: {{ .Values.service.consolePort }}
+      targetPort: console
+      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.consoleNodePort)) }}
+      nodePort: {{ .Values.service.consoleNodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

@@ -8,7 +8,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 1.x.x
-description: Bitnami Object Storage based on MinIO&reg; is an object storage server, compatible with Amazon S3 cloud storage service, mainly used for storing unstructured data (such as photos, videos, log files, etc.)
+description: This chart is made based on bitnami/minio chart version 7.1.7 app version 2021.6.17. The major difference is this chart is using official minio image and improves gateway settings.
 engine: gotpl
 home: https://github.com/bitnami/charts/tree/master/bitnami/minio
 icon: https://bitnami.com/assets/stacks/minio/img/minio-stack-220x234.png

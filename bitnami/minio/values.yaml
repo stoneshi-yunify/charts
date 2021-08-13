@@ -61,8 +61,8 @@ extraDeploy: []
 ##
 image:
   registry: docker.io
-  repository: bitnami/minio
-  tag: 2021.6.17-debian-10-r38
+  repository: minio/minio
+  tag: RELEASE.2021-08-05T22-01-19Z
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -216,6 +216,7 @@ hostAliases: []
 ## @param containerPort MinIO&reg; container port to open
 ##
 containerPort: 9000
+consoleContainerPort: 9001
 ## MinIO&reg; pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable pod Security Context
@@ -403,6 +404,8 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePort: ""
+  consolePort: 9001
+  consoleNodePort: ""
   ## @param service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
   ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -725,3 +728,6 @@ gateway:
       accessKey: ""
       secretKey: ""
       serviceEndpoint: https://s3.amazonaws.com
+  etcd:
+    enabled: false
+    endpoint: http://localhost:2379

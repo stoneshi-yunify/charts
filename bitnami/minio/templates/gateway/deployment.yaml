@@ -79,8 +79,6 @@ spec:
             {{- if .Values.args }}
             {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
             {{- else }}
-            - --certs-dir
-            - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
             - gateway
             - {{ .Values.gateway.type }}
             {{- if eq .Values.gateway.type "gcs" }}
@@ -90,6 +88,10 @@ spec:
             {{- else if eq .Values.gateway.type "s3" }}
             - {{ .Values.gateway.auth.s3.serviceEndpoint }}
             {{- end }}
+            - --certs-dir
+            - {{ default "/opt/bitnami/minio/certs" .Values.tls.mountPath }}
+            - --console-address
+            - ":{{ .Values.consoleContainerPort }}"
             {{- end }}
           env:
             {{- if eq .Values.gateway.type "azure" }}
@@ -106,6 +108,9 @@ spec:
             {{- else if and (eq .Values.gateway.type "gcs") .Values.gateway.auth.gcs.keyJSON }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: "/opt/bitnami/minio/secrets/key.json"
+            {{- else if and (eq .Values.gateway.type "s3") .Values.gateway.etcd.enabled }}
+            - name: MINIO_ETCD_ENDPOINTS
+              value: {{ .Values.gateway.etcd.endpoint }}
             {{- end }}
             - name: MINIO_ROOT_USER
               valueFrom:
@@ -134,6 +139,9 @@ spec:
           ports:
             - name: minio
               containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+            - name: console
+              containerPort: {{ .Values.consoleContainerPort }}
               protocol: TCP
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
